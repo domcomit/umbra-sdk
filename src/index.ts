@@ -39,6 +39,18 @@ export interface ServerConfig {
   mode: string;
 }
 
+export interface Balance {
+  deposited: number;
+  devGranted: number;
+  spent: number;
+  withdrawn: number;
+  available: number;
+  refundable: number;
+  queries: number;
+  staked: number;
+  tier: Tier | null;
+}
+
 /** A wallet input: a base58 address, a web3.js PublicKey, or anything with one
  *  (e.g. a Keypair or wallet adapter). Only the public key is used today. */
 export type WalletInput = string | PublicKey | { publicKey: PublicKey };
@@ -82,6 +94,11 @@ export class Umbra {
   /** The service ECDH public key prompts are encrypted to. */
   serverKey(): Promise<{ publicKey: string; curve: string; mode: string }> {
     return this.getJson("/api/server-key");
+  }
+
+  /** This wallet's credit balance + staking tier. */
+  balance(): Promise<Balance & { wallet: string }> {
+    return this.getJson(`/api/balance/${this.wallet.toBase58()}`);
   }
 }
 
