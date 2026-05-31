@@ -3,12 +3,14 @@
  *
  *   import { Umbra } from "@umbra/sdk";
  *   const umbra = new Umbra({ apiBase: "https://api.umbra.finance", wallet });
+ *   const { answer } = await umbra.chat("Analyze competitor X");
  *
  * Prompts are encrypted in-process before they are sent; the answer is decrypted
  * locally. The wallet pays per query from its on-chain credits balance.
  */
 
 import { PublicKey } from "@solana/web3.js";
+import { seal, open, Envelope } from "./crypto";
 
 export interface Tier {
   level: number;
@@ -16,6 +18,30 @@ export interface Tier {
   threshold: number;
   price: number;
   discount: number;
+}
+
+export interface Balance {
+  deposited: number;
+  devGranted: number;
+  spent: number;
+  withdrawn: number;
+  available: number;
+  refundable: number;
+  queries: number;
+  staked: number;
+  tier: Tier | null;
+}
+
+export interface Attestation {
+  sessionId: string;
+  teeProvider: string;
+  mode: string;
+  promptHash: string;
+  paramsHash: string;
+  timestamp: string;
+  solanaTx: string | null;
+  status: string;
+  note: string;
 }
 
 export interface ModelInfo {
@@ -39,16 +65,12 @@ export interface ServerConfig {
   mode: string;
 }
 
-export interface Balance {
-  deposited: number;
-  devGranted: number;
-  spent: number;
-  withdrawn: number;
-  available: number;
-  refundable: number;
-  queries: number;
-  staked: number;
-  tier: Tier | null;
+export interface ChatResult {
+  answer: string;
+  cost: number;
+  model: string;
+  balance: Balance;
+  attestation: Attestation;
 }
 
 /** A wallet input: a base58 address, a web3.js PublicKey, or anything with one
@@ -99,6 +121,34 @@ export class Umbra {
   /** This wallet's credit balance + staking tier. */
   balance(): Promise<Balance & { wallet: string }> {
     return this.getJson(`/api/balance/${this.wallet.toBase58()}`);
+  }
+
+  /** Send an encrypted prompt and get the decrypted answer. Charges per query. */
+  async chat(prompt: string, opts: { model?: string } = {}): Promise<ChatResult> {
+    if (!prompt?.trim()) throw new Error("prompt is empty");
+    const sk = await this.serverKey();
+    const sealed = await seal(sk.publicKey, this.wallet.toBytes(), prompt);
+
+    const res = await fetch(`${this.apiBase}/api/chat`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        wallet: this.wallet.toBase58(),
+        model: opts.model ?? "",
+        envelope: sealed.envelope as Envelope,
+      }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body?.message || body?.error || `request failed (${res.status})`);
+
+    const answer = await open(sealed.key, body.encryptedResponse);
+    return {
+      answer,
+      cost: body.cost,
+      model: body.model,
+      balance: body.balance,
+      attestation: body.attestation,
+    };
   }
 }
 
