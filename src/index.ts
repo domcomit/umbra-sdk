@@ -77,6 +77,17 @@ export interface ChatResult {
  *  (e.g. a Keypair or wallet adapter). Only the public key is used today. */
 export type WalletInput = string | PublicKey | { publicKey: PublicKey };
 
+export class UmbraError extends Error {
+  code: string;
+  status: number;
+  constructor(status: number, body: any) {
+    super(body?.message || body?.error || `request failed (${status})`);
+    this.name = "UmbraError";
+    this.code = body?.error || "error";
+    this.status = status;
+  }
+}
+
 function resolvePubkey(w: WalletInput): PublicKey {
   if (typeof w === "string") return new PublicKey(w);
   if (w instanceof PublicKey) return w;
@@ -104,7 +115,7 @@ export class Umbra {
   private async getJson<T>(path: string): Promise<T> {
     const res = await fetch(`${this.apiBase}${path}`);
     const body = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(body?.message || body?.error || `request failed (${res.status})`);
+    if (!res.ok) throw new UmbraError(res.status, body);
     return body as T;
   }
 
@@ -139,7 +150,7 @@ export class Umbra {
       }),
     });
     const body = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(body?.message || body?.error || `request failed (${res.status})`);
+    if (!res.ok) throw new UmbraError(res.status, body);
 
     const answer = await open(sealed.key, body.encryptedResponse);
     return {
@@ -149,6 +160,19 @@ export class Umbra {
       balance: body.balance,
       attestation: body.attestation,
     };
+  }
+
+  /** Withdraw unspent credits back to the wallet (backend-signed). */
+  withdraw(): Promise<{ ok: boolean; tx?: string; amount?: number }> {
+    return fetch(`${this.apiBase}/api/withdraw`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ wallet: this.wallet.toBase58() }),
+    }).then(async (res) => {
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new UmbraError(res.status, body);
+      return body;
+    });
   }
 }
 
