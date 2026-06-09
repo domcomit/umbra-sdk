@@ -6,10 +6,12 @@
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": ["dist", "README.md"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "example": "ts-node example.ts"
+    "example": "ts-node example.ts",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@solana/web3.js": "^1.95.0"
