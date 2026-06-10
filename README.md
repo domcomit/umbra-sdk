@@ -1,13 +1,14 @@
 <div align="center">
 
-# 🌒 @umbra/sdk
+# 🌒 Umbra SDK
 
 **Private, encrypted AI chat on Solana, in three lines of TypeScript.**
 
+[![npm](https://img.shields.io/npm/v/@umbra_intel/sdk.svg?color=cb3837&logo=npm)](https://www.npmjs.com/package/@umbra_intel/sdk)
+[![downloads](https://img.shields.io/npm/dm/@umbra_intel/sdk.svg?color=cb3837)](https://www.npmjs.com/package/@umbra_intel/sdk)
 [![License](https://img.shields.io/badge/license-MIT-black.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6.svg)](https://www.typescriptlang.org/)
 [![Solana](https://img.shields.io/badge/Solana-web3.js-14f195.svg)](https://solana.com)
-[![Node](https://img.shields.io/badge/node-%3E%3D18-339933.svg)](https://nodejs.org)
 
 </div>
 
@@ -26,13 +27,13 @@ balance, with discounts that follow your staking tier.
 ## Install
 
 ```bash
-npm install @umbra/sdk @solana/web3.js
+npm install @umbra_intel/sdk @solana/web3.js
 ```
 
 ## Quickstart
 
 ```ts
-import { Umbra } from "@umbra/sdk";
+import { Umbra } from "@umbra_intel/sdk";
 
 const umbra = new Umbra({ apiBase: "https://api.umbra.finance", wallet });
 
@@ -91,7 +92,7 @@ It is the same scheme the Umbra web app uses, built on Node's WebCrypto, so it r
 Failed calls throw a typed `UmbraError`:
 
 ```ts
-import { Umbra, UmbraError } from "@umbra/sdk";
+import { Umbra, UmbraError } from "@umbra_intel/sdk";
 
 try {
   await umbra.chat("...");

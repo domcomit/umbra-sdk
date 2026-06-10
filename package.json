@@ -1,8 +1,28 @@
 {
-  "name": "@umbra/sdk",
+  "name": "@umbra_intel/sdk",
   "version": "0.1.0",
-  "description": "Client SDK for Umbra Intelligence — private, encrypted AI chat on Solana. Three lines to a private prompt.",
+  "description": "Client SDK for Umbra Intelligence, private encrypted AI chat on Solana. Three lines to a private prompt.",
   "license": "MIT",
+  "author": "umbra_intel",
+  "homepage": "https://github.com/domcomit/umbra-sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/domcomit/umbra-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/domcomit/umbra-sdk/issues"
+  },
+  "keywords": [
+    "umbra",
+    "solana",
+    "ai",
+    "llm",
+    "encryption",
+    "ecdh",
+    "privacy",
+    "web3",
+    "sdk"
+  ],
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,6 +32,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "example": "ts-node example.ts",
     "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@solana/web3.js": "^1.95.0"

@@ -1,7 +1,7 @@
 /**
- * @umbra/sdk — client for the Umbra Intelligence backend.
+ * @umbra_intel/sdk — client for the Umbra Intelligence backend.
  *
- *   import { Umbra } from "@umbra/sdk";
+ *   import { Umbra } from "@umbra_intel/sdk";
  *   const umbra = new Umbra({ apiBase: "https://api.umbra.finance", wallet });
  *   const { answer } = await umbra.chat("Analyze competitor X");
  *
