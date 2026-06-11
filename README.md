@@ -39,7 +39,7 @@ const umbra = new Umbra({ apiBase: "https://api.umbra.finance", wallet });
 
 const { answer, cost } = await umbra.chat("Give me a competitive teardown of Acme");
 console.log(answer);
-console.log(`charged ${cost} USDC`);
+console.log(`charged ${cost} SOL`);
 ```
 
 `wallet` accepts any of these, and only ever reads the public key:

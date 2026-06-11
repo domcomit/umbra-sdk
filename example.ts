@@ -17,7 +17,7 @@ async function main() {
 
   const { answer, cost, attestation } = await umbra.chat("Say hi in exactly three words.");
   console.log("\nanswer:", answer);
-  console.log("cost:", cost, "USDC   solana_tx:", attestation.solanaTx ?? "(none)");
+  console.log("cost:", cost, "SOL   solana_tx:", attestation.solanaTx ?? "(none)");
 }
 
 main().catch((e) => {
