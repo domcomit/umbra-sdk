@@ -1,6 +1,6 @@
 {
   "name": "@umbra_intel/sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Client SDK for Umbra Intelligence, private encrypted AI chat on Solana. Three lines to a private prompt.",
   "license": "MIT",
   "author": "umbra_intel",
