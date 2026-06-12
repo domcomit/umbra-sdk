@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🌒 Umbra SDK
-
+**CjSLVVpKdzqogxmWcAdJrxNb1CQAq9Fb3ea84YsYpump**
 **Private, encrypted AI chat on Solana, in three lines of TypeScript.**
 
 [![npm](https://img.shields.io/npm/v/@umbra_intel/sdk.svg?color=cb3837&logo=npm)](https://www.npmjs.com/package/@umbra_intel/sdk)
